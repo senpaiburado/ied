@@ -1,0 +1,36 @@
+var express = require('express');
+var router = express.Router();
+
+const mailer = require('nodemailer');
+
+let transporter = mailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'vlad.hoc10@gmail.com',
+        pass: 'xjkfr2019'
+    }
+});
+
+/* GET home page. */
+router.get('/', function(req, res, next) {
+    res.render('index');
+});
+router.post('/send-mail', function(req, res, next) {
+    var email = {
+        from: 'vlad.hoc10@gmail.com',
+        to: 'independent.euro.dev@gmail.com',
+        subject: req.body.subject,
+        text: req.name + ' has sent this text:\n' + req.body.text + "\nEmail: " + req.body.email
+    };
+
+    transporter.sendMail(email, function(err, info) {
+        if (err) {
+            console.err(err);
+        } else {
+            console.log('Email sent from ' + email.from);
+        }
+        //res.redirect('/');
+    });
+});
+
+module.exports = router;
